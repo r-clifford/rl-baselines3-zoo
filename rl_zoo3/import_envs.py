@@ -3,6 +3,7 @@ from typing import Callable, Optional
 import gymnasium as gym
 from gymnasium.envs.registration import register
 
+
 from rl_zoo3.wrappers import MaskVelocityWrapper
 
 try:
@@ -45,7 +46,10 @@ try:
 except ImportError:
     pass
 
-
+try:
+    import f1tenth_gym
+except ImportError:
+    print("Cannot import f1tenth")
 # Register no vel envs
 def create_no_vel_env(env_id: str) -> Callable[[Optional[str]], gym.Env]:
     def make_env(render_mode: Optional[str] = None) -> gym.Env:

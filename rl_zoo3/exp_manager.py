@@ -1,4 +1,5 @@
 import argparse
+from copy import deepcopy
 import importlib
 import os
 import pickle as pkl
@@ -190,7 +191,8 @@ class ExperimentManager:
         hyperparams, self.env_wrapper, self.callbacks, self.vec_env_wrapper = self._preprocess_hyperparams(
             unprocessed_hyperparams
         )
-
+        self.env_kwargs = deepcopy(hyperparams["env_kwargs"])
+        self.eval_env_kwargs = deepcopy(hyperparams["eval_env_kwargs"])
         self.create_log_folder()
         self.create_callbacks()
 
