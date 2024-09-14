@@ -318,6 +318,8 @@ def sample_td3_params(trial: optuna.Trial, n_actions: int, n_envs: int, addition
         "small": [64, 64],
         "medium": [256, 256],
         "big": [400, 300],
+        "huge": [1600, 1200],
+        "giant": [3200, 2400],
         # Uncomment for tuning HER
         # "verybig": [256, 256, 256],
     }[net_arch_type]
