@@ -238,7 +238,7 @@ def sample_sac_params(trial: optuna.Trial, n_actions: int, n_envs: int, addition
     """
     use_expln = trial.suggest_categorical("use_expln", [False, True])
     gamma = trial.suggest_categorical("gamma", [0.9, 0.95, 0.98, 0.99, 0.995, 0.999, 0.9999])
-    learning_rate = trial.suggest_float("learning_rate", 1e-5, 1, log=True)
+    learning_rate = trial.suggest_float("learning_rate", 1e-6, 1, log=True)
     batch_size = trial.suggest_categorical("batch_size", [16, 32, 64, 128, 256, 512, 1024, 2048])
     buffer_size = trial.suggest_categorical("buffer_size", [int(1e4), int(1e5), int(1e6)])
     learning_starts = trial.suggest_categorical("learning_starts", [0, 1000, 10000, 20000])
@@ -252,7 +252,7 @@ def sample_sac_params(trial: optuna.Trial, n_actions: int, n_envs: int, addition
     # ent_coef = trial.suggest_categorical('ent_coef', ['auto', 0.5, 0.1, 0.05, 0.01, 0.0001])
     ent_coef = "auto"
     # You can comment that out when not using gSDE
-    log_std_init = trial.suggest_float("log_std_init", -4, 1)
+    log_std_init = trial.suggest_float("log_std_init", -6, 1)
     # NOTE: Add "verybig" to net_arch when tuning HER
     # net_arch_type = trial.suggest_categorical("net_arch", ["small", "medium", "big"])
     net_arch_type = trial.suggest_categorical(
@@ -350,6 +350,8 @@ def sample_td3_params(trial: optuna.Trial, n_actions: int, n_envs: int, addition
         "policy_kwargs": dict(net_arch=net_arch),
         "tau": tau,
         "policy_delay": policy_delay,
+        "target_policy_noise": target_policy_noise,
+        "target_noise_clip": target_noise_clip,
     }
 
     if noise_type == "normal":
@@ -508,6 +510,7 @@ def sample_crossq_params(trial: optuna.Trial, n_actions: int, n_envs: int, addit
     """
     hyperparams = sample_sac_params(trial, n_actions, n_envs, additional_args)
     hyperparams.pop("tau")
+    trial.params.pop("tau")
 
     batch_norm_momentum = trial.suggest_float("batch_norm_momentum", 0.001, 0.1)
     batch_norm_eps = trial.suggest_float("batch_norm_eps", 1e-5, 1e-3)
