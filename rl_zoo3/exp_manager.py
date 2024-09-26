@@ -841,10 +841,17 @@ class ExperimentManager:
         if self.verbose > 0:
             print(f"Sampler: {self.sampler} - Pruner: {self.pruner}")
 
+        storage = self.storage
+        if storage:
+            if "db" not in storage:
+                storage = optuna.storages.JournalStorage(
+                optuna.storages.journal.JournalFileBackend(storage)
+                )
+
         study = optuna.create_study(
             sampler=sampler,
             pruner=pruner,
-            storage=self.storage,
+            storage=storage,
             study_name=self.study_name,
             load_if_exists=True,
             direction="maximize",
